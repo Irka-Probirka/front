@@ -52,12 +52,14 @@ const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
                                 <div
                                     className={'absolute w-1.5 top-0 bottom-0 left-0 bg-royal-blue-600 dark:bg-royal-blue-400'}/>
                                 <span className={'font-medium text-royal-blue-950 dark:text-royal-blue-50'}>
-                                {getDayName(date.getDay()) + ' ' + fullMonth}
-                            </span>
+                                    {getDayName(date.getDay()) + ' ' + fullMonth}
+                                </span>
                                 {item?.lessons.map((lesson, index) => {
                                     const dateLesson = new Date(lesson.date_time);
                                     const hours = dateLesson.getHours();
                                     const minutes = dateLesson.getMinutes() < 10 ? `${dateLesson.getMinutes()}0` : dateLesson.getMinutes();
+
+                                    const isLessonOver = (dateLesson < new Date());
 
                                     return (
                                         <div
@@ -67,6 +69,9 @@ const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
                                             <div className={'space-x-1'}>
                                                 <span>{lesson.title}</span>
                                                 <span className={'underline'}>{hours}:{minutes}</span>
+                                            </div>
+                                            <div className={`${isLessonOver ? 'visible' : 'hidden'} text-royal-blue-900 dark:text-royal-blue-200`}>
+                                                Прошел
                                             </div>
                                         </div>
                                     )
