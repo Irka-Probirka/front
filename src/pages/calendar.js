@@ -1,4 +1,7 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {getAllLessons} from "../api/lessonAPI";
+import {getCourseInProfile} from "../api/coursesAPI";
+import {useAuth} from "../hooks/useAuth";
 
 
 const ArrowBack = () => {
@@ -21,27 +24,34 @@ const ArrowNext = () => {
 }
 
 
-const DayList = ({ daysInMonth, firstDayOfMonth, date }) => {
+const DayList = ({daysInMonth, firstDayOfMonth, lessons, date}) => {
     const currentDate = new Date();
 
     return (
-        <div className={'grid grid-cols-7 mt-2 *:h-10 *:text-center'}>
+        <div className={'grid grid-cols-7 mt-2'} id={'calendarList'}>
             {Array(daysInMonth).fill('').map((item, index) => {
                 const colStart = (firstDayOfMonth + index) % 7;
+
+                const todayLessons = lessons?.filter(lessons =>
+                    new Date(lessons.date_time).getDate() === index + 1 && new Date(lessons.date_time).getMonth() === date.getMonth()
+                );
+
                 return (
                     <div
                         key={index}
                         data-day={index + 1}
                         data-month={date.getMonth()}
                         className={`
-                            col-start-${colStart}
-                            mx-px my-px
+                            col-start-${colStart === 0 ? '7' : colStart}
+                            flex flex-col
+                            mx-px my-px h-16
                             text-zinc-600
                             dark:text-zinc-300
                             border border-solid
                         `}
                     >
-                        {index + 1}
+                        <div className={'text-center'}>{index + 1}</div>
+                        <div className={'flex gap-px'}>{todayLessons?.map(item => item.title)}</div>
                     </div>
                 )
             })}
@@ -52,6 +62,9 @@ const DayList = ({ daysInMonth, firstDayOfMonth, date }) => {
 
 const Calendar = () => {
     const [date, setDate] = useState(new Date());
+    const [lessons, setLessons] = useState([]);
+    const [courseInProfile, setCourseInProfile] = useState([]);
+    const {user} = useAuth();
 
     const getMonthName = (month) => {
         const monthNames = [
@@ -65,7 +78,42 @@ const Calendar = () => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfMonth = new Date(year, month, 1).getDay();
 
-    const title = getMonthName(date.getMonth()) + ' ' + date.getFullYear();
+    const [lessonsInProfile, setLessonsInProfile] = useState([]);
+
+    useEffect(() => {
+        document.title = 'Календарь | Диплом';
+
+        getAllLessons()
+            .then(setLessons)
+            .catch(reason => console.log(reason));
+    }, []);
+
+    // Должно фетчить при покупке новых курсов
+    // Сейчас фетчит только при первом рендере или изменениии пользователя
+    // т.е. при заходе сразу на эту страницу она рендерится, переходим на покупку курсов, покупаем, идем обратно
+    // и фетч не происходит, потому что пользователь не изменен и страница уже была отрендерена
+    useEffect(() => {
+        (async function(){
+            await getCourseInProfile(user?.profile)
+                .then(setCourseInProfile)
+                .catch(reason => console.log(reason));
+
+            setLessonsInProfile(lessons.filter(lesson => {
+                return courseInProfile.curses?.find(course => course.id === lesson.curse.id)
+            }));
+        })()
+    }, [user])
+
+
+    // const setAnimation = () => {
+    //     document.querySelector('#calendarList').classList.remove('animate-motionIn');
+    //     document.querySelector('#calendarList').classList.add('animate-motionOut');
+    //
+    //     setTimeout(() => {
+    //         document.querySelector('#calendarList').classList.add('animate-motionIn');
+    //         document.querySelector('#calendarList').classList.remove('animate-motionOut');
+    //     }, 500);
+    // }
 
     const handlePrevMonth = () => {
         setDate((prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1, 1));
@@ -85,15 +133,14 @@ const Calendar = () => {
                         <button onClick={handlePrevMonth}>
                             <ArrowBack/>
                         </button>
-                        <h2 className={'min-w-40 text-center'}>
-                            {title}
-                        </h2>
+                        <h2 className={'min-w-40 text-center'}>{getMonthName(date.getMonth())} {date.getFullYear()}</h2>
                         <button onClick={handleNextMonth}>
                             <ArrowNext/>
                         </button>
                     </div>
                     <div
-                        className={'grid grid-cols-7 text-center pb-2 text-zinc-600 dark:text-zinc-300 border-solid border-b'}>
+                        className={'grid grid-cols-7 text-center pb-2 text-zinc-600 dark:text-zinc-300 border-solid border-b'}
+                    >
                         <div>пн</div>
                         <div>вт</div>
                         <div>ср</div>
@@ -102,11 +149,14 @@ const Calendar = () => {
                         <div>сб</div>
                         <div>вс</div>
                     </div>
-                    <DayList daysInMonth={daysInMonth} firstDayOfMonth={firstDayOfMonth} date={date}/>
+                    <DayList
+                        lessons={lessonsInProfile}
+                        daysInMonth={daysInMonth}
+                        firstDayOfMonth={firstDayOfMonth}
+                        date={date}
+                    />
                 </section>
-                <section className={'text-center'}>
-                    Какой-то текст
-                </section>
+                <section className={'text-center'}>Какой-то текст</section>
             </div>
         </div>
     );

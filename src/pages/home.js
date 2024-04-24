@@ -57,6 +57,8 @@ const Home = () => {
     const {user} = useAuth();
 
     useEffect(() => {
+        document.title = 'Главная | Диплом';
+
         (async function () {
             await getCourses()
                 .then(setCourses)
