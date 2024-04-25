@@ -9,6 +9,7 @@ import Login from "./pages/login";
 import {AuthContext} from "./contexts/authContext";
 import Profile from "./pages/profile";
 import {getUserData} from "./api/userAPI";
+import RequireAuth from "./contexts/requireAuth";
 
 
 function App() {
@@ -33,7 +34,13 @@ function App() {
                         <Route path="about" element={<About/>}/>
                         <Route path="calendar" element={<Calendar/>}/>
                         <Route path="login" element={<Login/>}/>
-                        <Route path="profile" element={<Profile/>}/>
+
+                        <Route path="profile" element={
+                            <RequireAuth>
+                                <Profile/>
+                            </RequireAuth>
+                        }/>
+
                     </Route>
                 </Routes>
             </BrowserRouter>
