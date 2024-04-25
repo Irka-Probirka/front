@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {getAllLessons} from "../api/lessonAPI";
 import {getCourseInProfile} from "../api/coursesAPI";
 import {useAuth} from "../hooks/useAuth";
+import ToDoRightMenu from "../components/pages/calendar/toDoRightMenu";
+import DayList from "../components/pages/calendar/dayList";
 
 
 const ArrowBack = () => {
@@ -24,58 +26,11 @@ const ArrowNext = () => {
 }
 
 
-const DayList = ({daysInMonth, firstDayOfMonth, lessons, date}) => {
-    const currentDate = new Date();
-
-    return (
-        <div className={'grid grid-cols-7 mt-2 animate-motionIn'} id={'calendarList'}>
-            {Array(daysInMonth).fill('').map((item, index) => {
-                const colStart = (firstDayOfMonth + index) % 7;
-                const todayLessons = lessons?.filter(lessons =>
-                    new Date(lessons.date_time).getDate() === index + 1 && new Date(lessons.date_time).getMonth() === date.getMonth()
-                );
-                const isThisToday = currentDate.getDate() === index + 1 && currentDate.getMonth() === date.getMonth();
-
-                return (
-                    <div
-                        key={index}
-                        className={`
-                            col-start-${colStart === 0 ? '7' : colStart}
-                            flex flex-col
-                            mx-px my-px h-16
-                            ${isThisToday ? 'bg-royal-blue-300 text-white' : 'text-zinc-600'}
-                            dark:text-zinc-300
-                            border border-solid border-black
-                        `}
-                    >
-                        <div className={'text-center'}>{index + 1}</div>
-                        <div className={'flex flex-col text-xs'}>
-                            {todayLessons?.map((item, index) => {
-                                const dateLesson = new Date(item.date_time);
-                                const hours = dateLesson.getHours();
-                                const minutes = dateLesson.getMinutes() < 10 ? `${dateLesson.getMinutes()}0` : dateLesson.getMinutes();
-
-                                return (
-                                    <div key={index} className={'flex justify-between px-1 animate-motionIn'} >
-                                        <div>{item.curse.subject.title}</div>
-                                        <div>{hours}:{minutes}</div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-                )
-            })}
-        </div>
-    )
-}
-
-
 const Calendar = () => {
     const [date, setDate] = useState(new Date());
     const [lessons, setLessons] = useState([]);
     const [courseInProfile, setCourseInProfile] = useState([]);
-    const {user} = useAuth();
+    const {user, isAuth} = useAuth();
 
     const getMonthName = (month) => {
         const monthNames = [
@@ -84,19 +39,13 @@ const Calendar = () => {
         return monthNames[month];
     };
 
-    const getDayName = (day) => {
-        const dayNames = [
-            "Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота",
-        ];
-        return dayNames[day];
-    };
-
     const year = date.getFullYear();
     const month = date.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfMonth = new Date(year, month, 1).getDay();
 
     const [lessonsInProfile, setLessonsInProfile] = useState([]);
+    const [lessonInProfileGroupBy, setLessonInProfileGroupBy] = useState([]);
 
     useEffect(() => {
         document.title = 'Календарь | Диплом';
@@ -104,36 +53,40 @@ const Calendar = () => {
         getAllLessons()
             .then(setLessons)
             .catch(reason => console.log(reason));
-    }, []);
 
-    useEffect(() => {
-        getCourseInProfile(user?.profile)
-            .then(setCourseInProfile)
-            .catch(reason => console.log(reason));
-    }, [user])
+        if (user) {
+            getCourseInProfile(user?.profile)
+                .then(setCourseInProfile)
+                .catch(reason => console.log(reason));
+        }
+
+        if (!isAuth)
+            setLessons(prev => []);
+
+    }, [user, isAuth]);
+
+    console.log(courseInProfile);
 
     useEffect(() => {
         setLessonsInProfile(lessons.filter(lesson => {
             return courseInProfile.curses?.find(course => course.id === lesson.curse.id)
         }));
 
+        // Сортировка уроков по дате для дальнейшей их группировки
         setLessonsInProfile(prev => prev.sort((a, b) => new Date(a.date_time) - new Date(b.date_time)));
 
         // Групировка уроков по дням
-        if (lessonsInProfile.length !== 0) groupBy();
+        if (lessonsInProfile.length !== 0) setLessonInProfileGroupBy(groupBy);
 
     }, [lessons, courseInProfile])
 
-
-    // const setAnimation = () => {
-    //     document.querySelector('#calendarList').classList.remove('animate-motionIn');
-    //     document.querySelector('#calendarList').classList.add('animate-motionOut');
-    //
-    //     setTimeout(() => {
-    //         document.querySelector('#calendarList').classList.add('animate-motionIn');
-    //         document.querySelector('#calendarList').classList.remove('animate-motionOut');
-    //     }, 500);
-    // }
+    useEffect(() => {
+        setLessonInProfileGroupBy(prev => {
+            prev?.filter(lesson => new Date(lesson.date_time).getTime() >= new Date(year, month, 1).getTime() && new Date(lesson.date_time).getTime() <= new Date(year, month, daysInMonth).getTime())
+        })
+        // console.log('date1: ', new Date(year, month, 1));
+        // console.log('date2: ', new Date(year, month, daysInMonth));
+    }, [date])
 
     const handlePrevMonth = () => {
         setDate((prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1, 1));
@@ -164,7 +117,7 @@ const Calendar = () => {
     return (
         <div className="container max-w-7xl px-6 mx-auto">
             <h2 className={'text-center text-2xl font-semibold mt-6 mb-4'}>Календарь ваших занятий</h2>
-            <div className={'grid grid-cols-[3fr,_1fr] *:mt-4'}>
+            <div className={`grid ${isAuth ? 'grid-cols-[3fr,_1fr]' : 'grid-cols-1'} *:mt-4`}>
                 <section className={'space-y-4'}>
                     <div className="flex justify-center gap-2">
                         <button onClick={handlePrevMonth}>
@@ -178,13 +131,9 @@ const Calendar = () => {
                     <div
                         className={'grid grid-cols-7 text-center pb-2 text-zinc-600 dark:text-zinc-300 border-solid border-b'}
                     >
-                        <div>пн</div>
-                        <div>вт</div>
-                        <div>ср</div>
-                        <div>чт</div>
-                        <div>пт</div>
-                        <div>сб</div>
-                        <div>вс</div>
+                        {['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map((day, index) =>
+                            <div key={index}>{day}</div>
+                        )}
                     </div>
                     <DayList
                         lessons={lessonsInProfile}
@@ -193,23 +142,9 @@ const Calendar = () => {
                         date={date}
                     />
                 </section>
-                <section className={'text-center'}>
-                    <h3>Уроки в этом месяце</h3>
-                    <ul className={'mt-4'}>
-                        {lessonsInProfile &&
-                            lessonsInProfile.map((lesson, index) => {
-                                const lessonDate = new Date(lesson.date_time);
-                                const lessonDay = getDayName(lessonDate.getDay());
-
-                                return (
-                                    <li key={index} className={'animate-motionIn'}>
-                                        <div>{lessonDay}</div>
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
-                </section>
+                {isAuth &&
+                    <ToDoRightMenu lessonInProfileGroupBy={lessonInProfileGroupBy}/>
+                }
             </div>
         </div>
     );
