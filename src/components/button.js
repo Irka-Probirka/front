@@ -16,7 +16,7 @@ const Button = ({type, disable, children, ...props}) => {
 
     return (
         <button
-            className={`w-full text-center rounded-lg button-shadow ${className}`}
+            className={`w-full text-center rounded-lg button-shadow ${className} transition-colors duration-500`}
             disabled={!!disable}
             {...props}
         >

@@ -12,6 +12,7 @@ const CourseCard = ({course, isBuyed, ...props}) => {
             className={`
                 p-3 rounded
                 has-[:disabled]:opacity-50 opacity-1
+                has-[:disabled]:animate-opacityHide50
                 dark:hover:outline-royal-blue-600
                 bg-gradient-to-br to-70%
                 from-royal-blue-200 to-royal-blue-300 text-black

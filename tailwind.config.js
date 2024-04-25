@@ -13,6 +13,8 @@ module.exports = {
       animation: {
         motionIn: 'motionIn .500s',
         motionOut: 'motionOut .500s',
+        opacityIn: 'opacityIn .500s',
+        opacityHide50: 'opacityHide50 .500s',
       },
       keyframes: {
         motionIn: {
@@ -33,6 +35,22 @@ module.exports = {
           '100%': {
             opacity: 0,
             transform: 'translateY(10px)',
+          }
+        },
+        opacityIn: {
+          '0%': {
+            opacity: 0,
+          },
+          '100%': {
+            opacity: 1,
+          }
+        },
+        opacityHide50: {
+          '0%': {
+            opacity: 1,
+          },
+          '100%': {
+            opacity: .5,
           }
         },
       }
