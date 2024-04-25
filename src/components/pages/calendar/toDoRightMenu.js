@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 
 
 const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
+    const currentDate = new Date();
     const year = date.getFullYear();
     const month = date.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -17,22 +18,24 @@ const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
 
 
     useEffect(() => {
-        const dateStartMonth = new Date(year, month, 1).getTime();
-        const dateEndMonth = new Date(year, month, daysInMonth).getTime();
+        const dayStartWeek = currentDate.getDate() - currentDate.getDay() + 1;
+
+        const dateStartWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayStartWeek);
+        const dateEndWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayStartWeek + 7);
 
         const filteredLessons = lessonInProfileGroupBy.filter(item =>
-            new Date(item.date).getTime() >= dateStartMonth && new Date(item.date).getTime() <= dateEndMonth
+            new Date(item.date).getTime() >= dateStartWeek && new Date(item.date).getTime() <= dateEndWeek
         );
 
         const sortedLessons = filteredLessons.sort((a, b) => new Date(a.date) - new Date(b.date));
         setFilteredLessons(sortedLessons);
 
-    }, [date, lessonInProfileGroupBy])
+    }, [lessonInProfileGroupBy])
 
 
     return (
         <section className={'text-center'}>
-            <h3>Уроки в этом месяце</h3>
+            <h3>Уроки на этой неделе</h3>
             <ul className={'mt-4 space-y-2'}>
                 {filteredLessons.length !== 0 &&
                     filteredLessons?.map((item, index) => {
@@ -73,7 +76,7 @@ const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
                     })}
                 {filteredLessons.length === 0 &&
                     <div className={'flex justify-center gap-3'}>
-                        <div>В этом месяце уроков нет</div>
+                        <div>На неделе уроков нет</div>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                              stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round"
