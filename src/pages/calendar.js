@@ -88,21 +88,19 @@ const Calendar = () => {
             .catch(reason => console.log(reason));
     }, []);
 
-    // Должно фетчить при покупке новых курсов
-    // Сейчас фетчит только при первом рендере или изменениии пользователя
-    // т.е. при заходе сразу на эту страницу она рендерится, переходим на покупку курсов, покупаем, идем обратно
-    // и фетч не происходит, потому что пользователь не изменен и страница уже была отрендерена
     useEffect(() => {
-        (async function(){
-            await getCourseInProfile(user?.profile)
-                .then(setCourseInProfile)
-                .catch(reason => console.log(reason));
-
-            setLessonsInProfile(lessons.filter(lesson => {
-                return courseInProfile.curses?.find(course => course.id === lesson.curse.id)
-            }));
-        })()
+        getCourseInProfile(user?.profile)
+            .then(setCourseInProfile)
+            .catch(reason => console.log(reason));
     }, [user])
+
+    useEffect(() => {
+        setLessonsInProfile(lessons.filter(lesson => {
+            return courseInProfile.curses?.find(course => course.id === lesson.curse.id)
+        }));
+
+        console.log('lessons: ', lessonsInProfile);
+    }, [lessons, courseInProfile])
 
 
     // const setAnimation = () => {
