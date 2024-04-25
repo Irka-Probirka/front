@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {getAllLessons} from "../api/lessonAPI";
 import {getCourseInProfile} from "../api/coursesAPI";
 import {useAuth} from "../hooks/useAuth";
 import ToDoRightMenu from "../components/pages/calendar/toDoRightMenu";
@@ -28,8 +27,6 @@ const ArrowNext = () => {
 
 const Calendar = () => {
     const [date, setDate] = useState(new Date());
-    const [lessons, setLessons] = useState([]);
-    const [courseInProfile, setCourseInProfile] = useState([]);
     const {user, isAuth} = useAuth();
 
     const getMonthName = (month) => {
@@ -45,48 +42,32 @@ const Calendar = () => {
     const firstDayOfMonth = new Date(year, month, 1).getDay();
 
     const [lessonsInProfile, setLessonsInProfile] = useState([]);
-    const [lessonInProfileGroupBy, setLessonInProfileGroupBy] = useState([]);
+    const [lessonsInProfileGroupBy, setLessonsInProfileGroupBy] = useState([]);
 
     useEffect(() => {
         document.title = 'Календарь | Диплом';
 
-        getAllLessons()
-            .then(setLessons)
-            .catch(reason => console.log(reason));
-
         if (user) {
             getCourseInProfile(user?.profile)
-                .then(setCourseInProfile)
+                .then(data => {
+                    const lessons = [...data.curses.map(item => item.lessons)];
+                    const result = [].concat(...lessons);
+                    setLessonsInProfile(result);
+                })
                 .catch(reason => console.log(reason));
         }
-
-        if (!isAuth)
-            setLessons(prev => []);
-
-    }, [user, isAuth]);
-
-    console.log(courseInProfile);
-
-    useEffect(() => {
-        setLessonsInProfile(lessons.filter(lesson => {
-            return courseInProfile.curses?.find(course => course.id === lesson.curse.id)
-        }));
 
         // Сортировка уроков по дате для дальнейшей их группировки
         setLessonsInProfile(prev => prev.sort((a, b) => new Date(a.date_time) - new Date(b.date_time)));
 
-        // Групировка уроков по дням
-        if (lessonsInProfile.length !== 0) setLessonInProfileGroupBy(groupBy);
+        if (!isAuth) setLessonsInProfile(prev => []);
 
-    }, [lessons, courseInProfile])
+    }, [user, isAuth]);
 
     useEffect(() => {
-        setLessonInProfileGroupBy(prev => {
-            prev?.filter(lesson => new Date(lesson.date_time).getTime() >= new Date(year, month, 1).getTime() && new Date(lesson.date_time).getTime() <= new Date(year, month, daysInMonth).getTime())
-        })
-        // console.log('date1: ', new Date(year, month, 1));
-        // console.log('date2: ', new Date(year, month, daysInMonth));
-    }, [date])
+        // Групировка уроков по дням
+        setLessonsInProfileGroupBy(groupBy);
+    }, [lessonsInProfile])
 
     const handlePrevMonth = () => {
         setDate((prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1, 1));
@@ -117,7 +98,7 @@ const Calendar = () => {
     return (
         <div className="container max-w-7xl px-6 mx-auto">
             <h2 className={'text-center text-2xl font-semibold mt-6 mb-4'}>Календарь ваших занятий</h2>
-            <div className={`grid ${isAuth ? 'grid-cols-[3fr,_1fr]' : 'grid-cols-1'} *:mt-4`}>
+            <div className={`grid ${isAuth ? 'grid-cols-[3fr,_1fr]' : 'grid-cols-1'} gap-8 *:mt-4`}>
                 <section className={'space-y-4'}>
                     <div className="flex justify-center gap-2">
                         <button onClick={handlePrevMonth}>
@@ -143,7 +124,7 @@ const Calendar = () => {
                     />
                 </section>
                 {isAuth &&
-                    <ToDoRightMenu lessonInProfileGroupBy={lessonInProfileGroupBy}/>
+                    <ToDoRightMenu date={date} lessonInProfileGroupBy={lessonsInProfileGroupBy}/>
                 }
             </div>
         </div>
