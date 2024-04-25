@@ -2,13 +2,12 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './input.css';
 import Home from "./pages/home";
 import About from "./pages/about";
-import React, {useState} from "react";
+import {useState} from "react";
 import Layout from "./components/Layout";
 import Calendar from "./pages/calendar";
 import Login from "./pages/login";
 import {AuthContext} from "./contexts/authContext";
 import Profile from "./pages/profile";
-import {useAuth} from "./hooks/useAuth";
 import {getUserData} from "./api/userAPI";
 
 
@@ -18,7 +17,11 @@ function App() {
     if (!user && localStorage.getItem('auth') === 'true') {
         getUserData()
             .then(setUser)
-            .catch(reason => console.log('App.js: ', reason));
+            .catch(reason => {
+                localStorage.setItem('auth', 'false');
+                localStorage.removeItem('token');
+                console.log('App.js: ', reason);
+            });
     }
 
     return (
