@@ -9,7 +9,8 @@ import Login from "./pages/login";
 import {AuthContext} from "./contexts/authContext";
 import Profile from "./pages/profile";
 import {getUserData} from "./api/userAPI";
-import RequireAuth from "./contexts/requireAuth";
+import PrivateWrapper from "./contexts/privateWrapper";
+import Lesson from "./pages/lesson";
 
 
 function App() {
@@ -35,11 +36,10 @@ function App() {
                         <Route path="calendar" element={<Calendar/>}/>
                         <Route path="login" element={<Login/>}/>
 
-                        <Route path="profile" element={
-                            <RequireAuth>
-                                <Profile/>
-                            </RequireAuth>
-                        }/>
+                        <Route element={<PrivateWrapper />}>
+                            <Route path="profile" element={<Profile />} />
+                            <Route path="lesson/:id" element={<Lesson />} />
+                        </Route>
 
                     </Route>
                 </Routes>

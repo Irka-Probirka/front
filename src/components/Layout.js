@@ -81,7 +81,7 @@ const Layout = () => {
         <div className={'min-w-[320px] bg-zinc-50 dark:bg-zinc-900'}>
             <header
                 className={`
-                    fixed top-0 w-full h-14 px-6
+                    fixed top-0 w-full h-14 px-2 sm:px-6
                     text-zinc-800 dark:text-zinc-100
                     bg-white dark:bg-zinc-900
                     border-b border-solid
