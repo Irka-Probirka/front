@@ -18,7 +18,7 @@ const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
 
 
     useEffect(() => {
-        const dayStartWeek = currentDate.getDate() - currentDate.getDay() + 1;
+        const dayStartWeek = currentDate.getDate() - (currentDate.getDay() === 0 ? 7 : currentDate.getDay()) + 1;
 
         const dateStartWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayStartWeek);
         const dateEndWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayStartWeek + 7);
