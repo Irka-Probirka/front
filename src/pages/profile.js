@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {getCourseInProfile} from "../api/coursesAPI";
 import {Link} from "react-router-dom";
 import CourseGrid from "../components/pages/profile/coursesGrid";
+import Span from "../components/span";
 
 
 const Lessons = ({selectedCourse}) => {
@@ -34,7 +35,7 @@ const Lessons = ({selectedCourse}) => {
                                 key={index}
                                 className={`ml-5`}
                             >
-                                <Link to={`lesson/${lesson.id}`} className={`relative flex gap-2 w-max`}>
+                                <Link to={`/lesson/${lesson.id}`} className={`relative flex gap-2 w-max`}>
                                     <div className={`absolute top-1/2 w-full border-b-2 border-solid ${isLessonPass ? 'visible' : 'hidden'}`}/>
                                     <div className={'truncate min-w-[200px]'}>{lesson.title}</div>
                                     <div>{lessonFullTime}</div>
@@ -86,8 +87,11 @@ const Profile = () => {
                     }
                 </div>
                 :
-                <div className={'flex w-full items-center'}>
-                    <Link to={'/'}>Перейти к покупке курсов</Link>
+                <div className={'flex flex-col items-center gap-4 mt-8 text-lg'}>
+                    <span>
+                        Кажется, <Span>у Вас нет</Span> приобретенных <Span>курсов</Span>
+                    </span>
+                    <Link to={'/'} className={'text-royal-blue-600 underline'}>Нажмите, чтобы перейти к покупке</Link>
                 </div>
             }
         </div>
