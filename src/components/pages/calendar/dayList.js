@@ -29,8 +29,8 @@ const DayList = ({daysInMonth, firstDayOfMonth, lessons, date}) => {
                     >
                         <div className={'text-center text-sm sm:text-base pt-1 sm:pt-0'}>{index + 1}</div>
                         <div className={'flex sm:hidden justify-center pt-2 h-full gap-1'}>
-                            {sortedTodayLessons.map(item =>
-                                <div className={'size-[5px] bg-royal-blue-600 dark:bg-royal-blue-400 rounded-full'}/>
+                            {sortedTodayLessons.map((item, index) =>
+                                <div key={index} className={'size-[5px] bg-royal-blue-600 dark:bg-royal-blue-400 rounded-full'}/>
                             )}
                         </div>
                         <div className={'hidden sm:flex flex-col text-xs'}>
