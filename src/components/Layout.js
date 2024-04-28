@@ -102,8 +102,7 @@ const Layout = () => {
                     </div>
                 </nav>
             </header>
-            <main
-                className={'pt-14 min-h-[100vh] text-zinc-800 dark:text-zinc-100 transition-colors duration-700'}>
+            <main className={'pt-14 min-h-[100vh] text-zinc-800 dark:text-zinc-100 transition-colors duration-700'}>
                 <Outlet/>
             </main>
         </div>

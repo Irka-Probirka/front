@@ -26,6 +26,7 @@ function App() {
             });
     }
 
+
     return (
         <AuthContext.Provider value={{user, setUser}}>
             <BrowserRouter>
@@ -36,9 +37,9 @@ function App() {
                         <Route path="calendar" element={<Calendar/>}/>
                         <Route path="login" element={<Login/>}/>
 
-                        <Route element={<PrivateWrapper />}>
-                            <Route path="profile" element={<Profile />} />
-                            <Route path="lesson/:id" element={<Lesson />} />
+                        <Route element={<PrivateWrapper/>}>
+                            <Route path="profile" element={<Profile/>}/>
+                            <Route path="lesson/:id" element={<Lesson/>}/>
                         </Route>
 
                     </Route>

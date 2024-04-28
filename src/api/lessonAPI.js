@@ -20,3 +20,13 @@ export const getLessonsInCourse = async (course_id) => {
 
     return Promise.reject('Ошибка при получении уроков из курса')
 }
+
+export const getLessonById = async (lesson_id) => {
+    const response = await fetch(API_URL + 'someLessonsInCourses/' + lesson_id);
+
+    if (response.ok) {
+        return await response.json()
+    }
+
+    return Promise.reject('Ошибка при получении урока по id')
+}
