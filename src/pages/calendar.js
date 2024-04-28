@@ -98,13 +98,13 @@ const Calendar = () => {
     return (
         <div className="container max-w-7xl px-6 mx-auto">
             <h2 className={'text-center text-2xl font-semibold mt-6 mb-4'}>Календарь ваших занятий</h2>
-            <div className={`grid ${isAuth ? 'grid-cols-[3fr,_1fr]' : 'grid-cols-1'} gap-8 *:mt-4`}>
+            <div className={`grid ${isAuth ? 'grid-cols-1 800:grid-cols-[3fr,_1fr]' : 'grid-cols-1'} gap-8 *:mt-4`}>
                 <section className={'space-y-4'}>
                     <div className="flex justify-center gap-2">
                         <button onClick={handlePrevMonth}>
                             <ArrowBack/>
                         </button>
-                        <h2 className={'min-w-40 text-center'}>{getMonthName(date.getMonth())} {date.getFullYear()}</h2>
+                        <h2 className={'w-max sm:min-w-40 text-center'}>{getMonthName(date.getMonth())} {date.getFullYear()}</h2>
                         <button onClick={handleNextMonth}>
                             <ArrowNext/>
                         </button>

@@ -40,8 +40,7 @@ const AuthMenu = () => {
                             dark:bg-royal-blue-950
                             overflow-hidden
                         `}>
-                        <div
-                            className={'absolute w-1.5 top-0 right-0 bottom-0 bg-royal-blue-600 dark:bg-royal-blue-400'}/>
+                        <div className={'absolute w-1.5 top-0 right-0 bottom-0 bg-royal-blue-600 dark:bg-royal-blue-400'}/>
                         <ul className={'pb-2 mb-1 border-b border-solid space-y-0.5'}>
                             <li>
                                 <Link to={'profile'}>Профиль</Link>
@@ -78,10 +77,10 @@ const Layout = () => {
 
     // border-zinc-600 dark:border-zinc-400
     return (
-        <div className={'min-w-[320px] bg-zinc-50 dark:bg-zinc-900'}>
+        <div className={'min-w-[320px] min-h-[100vh] flex flex-col bg-zinc-50 dark:bg-zinc-900'}>
             <header
                 className={`
-                    fixed top-0 w-full h-14 px-2 sm:px-6
+                    fixed top-0 w-full h-14 px-2 sm:px-6 z-50
                     text-zinc-800 dark:text-zinc-100
                     bg-white dark:bg-zinc-900
                     border-b border-solid
@@ -102,9 +101,12 @@ const Layout = () => {
                     </div>
                 </nav>
             </header>
-            <main className={'pt-14 min-h-[100vh] text-zinc-800 dark:text-zinc-100 transition-colors duration-700'}>
+            <main className={'pt-14 mb-6 grow text-zinc-800 dark:text-zinc-100 transition-colors duration-700'}>
                 <Outlet/>
             </main>
+            <footer className={'h-40 bg-zinc-500'}>
+
+            </footer>
         </div>
     )
 }

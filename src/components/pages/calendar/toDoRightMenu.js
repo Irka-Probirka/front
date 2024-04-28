@@ -66,12 +66,12 @@ const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
                                             key={index}
                                             className={'flex justify-between text-sm mt-1 text-royal-blue-900 dark:text-royal-blue-200'}
                                         >
-                                            <div className={'space-x-1'}>
+                                            <div className={'space-x-1 no-underline 800:line-through lg:no-underline'}>
                                                 <span>{lesson.title}</span>
-                                                <span className={'underline'}>{hours}:{minutes}</span>
+                                                <span className={'lg:underline'}>{hours}:{minutes}</span>
                                             </div>
-                                            <div className={`${isLessonOver ? 'visible' : 'hidden'} text-royal-blue-900 dark:text-royal-blue-200`}>
-                                                Прошел
+                                            <div className={`${isLessonOver ? 'block' : 'hidden'} ml-1 block 800:hidden lg:block text-royal-blue-900 dark:text-royal-blue-200`}>
+                                                Закончился
                                             </div>
                                         </div>
                                     )

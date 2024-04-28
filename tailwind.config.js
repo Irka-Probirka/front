@@ -10,6 +10,10 @@ module.exports = {
   darkMode: 'selector',
   theme: {
     extend: {
+      screens: {
+        '800': '800px',
+        '400': '400px',
+      },
       animation: {
         motionIn: 'motionIn .500s',
         motionOut: 'motionOut .500s',
