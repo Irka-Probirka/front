@@ -1,6 +1,7 @@
 import ChangeThemeButton from "./changeThemeButton";
 import {Link, Outlet, useLocation} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
+import {useEffect, useState} from "react";
 
 
 const NavLink = ({href, children}) => {
@@ -21,35 +22,70 @@ const NavLink = ({href, children}) => {
 }
 
 
+const MenuLink = ({to, children}) => {
+    return (
+        <Link to={to} className={'flex justify-between items-center px-3 py-2 hover:bg-royal-blue-400 hover:text-white dark:hover:bg-royal-blue-700'}>
+            {children}
+        </Link>
+    )
+}
+
+
 const AuthMenu = () => {
+    const [visible, setVisible] = useState(false);
     const {user, isAuth, logOut} = useAuth();
+
+    const handlerOpenMenu = (event) => {
+        if (event.target.id !== 'headerMenu') {
+            setVisible(false);
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('click', handlerOpenMenu);
+
+        return () => {document.removeEventListener('click', handlerOpenMenu)}
+    }, [])
 
     if (isAuth) {
         return (
-            <div className={'group relative'}>
-                <span className={'select-none'}>{user?.first_name} {user?.last_name}</span>
+            <div className={'relative'} onClick={() => setVisible(prev => !prev)}>
+                <span className={'hidden 400:block select-none hover:cursor-pointer'} id={"headerMenu"}>
+                    {user?.first_name} {user?.last_name}
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
+                     className="size-6 block 400:hidden">
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                </svg>
                 <div
                     className={`
-                        hidden group-hover:block hover:block
-                        absolute left-0 right-0 -bottom-[max-content] w-full pt-2
-                    `}>
+                        ${visible ? 'block' : 'hidden'}
+                        absolute right-0 -bottom-[max-content] w-52 mt-[15px]
+                    `}
+                >
                     <div
-                        className={`
-                            relative flex flex-col text-right rounded-l p-3
-                            bg-royal-blue-100
-                            dark:bg-royal-blue-950
-                            overflow-hidden
-                        `}>
-                        <div className={'absolute w-1.5 top-0 right-0 bottom-0 bg-royal-blue-600 dark:bg-royal-blue-400'}/>
-                        <ul className={'pb-2 mb-1 border-b border-solid space-y-0.5'}>
-                            <li>
-                                <Link to={'profile'}>Профиль</Link>
-                            </li>
-                            <li>
-                                <Link to={'tasks'}>Задачи</Link>
-                            </li>
+                        className={'flex flex-col text-right overflow-hidden rounded-md bg-zinc-100 dark:bg-royal-blue-950 shadow-lg dark:shadow-royal-blue-900'}
+                    >
+                        <ul className={'border-b border-solid space-y-0.5'}>
+                            <MenuLink to={'profile'}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     strokeWidth={1.5} stroke="currentColor" className="size-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+                                </svg>
+                                <span>Профиль</span>
+                            </MenuLink>
+                            <MenuLink to={'tasks'}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
+                                </svg>
+                                <span>Задачи</span>
+                            </MenuLink>
                         </ul>
-                        <button onClick={logOut}>Выйти</button>
+                        <button onClick={logOut} className={'w-full py-2.5 hover:bg-royal-blue-400 hover:text-white dark:hover:bg-royal-blue-700'}>Выйти</button>
                     </div>
                 </div>
             </div>
