@@ -15,7 +15,7 @@ const Message = ({children}) => {
 const LinkBack = () => {
     return (
         <Link
-            to={'/profile'}
+            to={'/courses'}
             className={`
                 group flex items-center gap-1 
                 rounded-lg overflow-hidden py-0.5 px-3 w-max

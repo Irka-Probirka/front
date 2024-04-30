@@ -24,7 +24,8 @@ const NavLink = ({href, children}) => {
 
 const MenuLink = ({to, children}) => {
     return (
-        <Link to={to} className={'flex justify-between items-center px-3 py-2 hover:bg-royal-blue-400 hover:text-white dark:hover:bg-royal-blue-700'}>
+        <Link to={to}
+              className={'flex justify-between items-center px-3 py-2 hover:bg-royal-blue-400 hover:text-white dark:hover:bg-royal-blue-700'}>
             {children}
         </Link>
     )
@@ -44,7 +45,7 @@ const AuthMenu = () => {
     useEffect(() => {
         document.addEventListener('click', handlerOpenMenu);
 
-        return () => {document.removeEventListener('click', handlerOpenMenu)}
+        return () => document.removeEventListener('click', handlerOpenMenu)
     }, [])
 
     if (isAuth) {
@@ -53,7 +54,8 @@ const AuthMenu = () => {
                 <span className={'hidden 400:block select-none hover:cursor-pointer'} id={"headerMenu"}>
                     {user?.first_name} {user?.last_name}
                 </span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor"
                      className="size-6 block 400:hidden">
                     <path strokeLinecap="round" strokeLinejoin="round"
                           d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
@@ -76,16 +78,26 @@ const AuthMenu = () => {
                                 </svg>
                                 <span>Профиль</span>
                             </MenuLink>
+                            <MenuLink to={'courses'}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     strokeWidth={1.5} stroke="currentColor" className="size-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"/>
+                                </svg>
+                                <span>Мои курсы</span>
+                            </MenuLink>
                             <MenuLink to={'tasks'}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                     strokeWidth={1.5} stroke="currentColor" className="size-5">
                                     <path strokeLinecap="round" strokeLinejoin="round"
                                           d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
                                 </svg>
                                 <span>Задачи</span>
                             </MenuLink>
                         </ul>
-                        <button onClick={logOut} className={'w-full py-2.5 hover:bg-royal-blue-400 hover:text-white dark:hover:bg-royal-blue-700'}>Выйти</button>
+                        <button onClick={logOut}
+                                className={'w-full py-2.5 hover:bg-royal-blue-400 hover:text-white dark:hover:bg-royal-blue-700'}>Выйти
+                        </button>
                     </div>
                 </div>
             </div>
@@ -111,15 +123,13 @@ const SvgIcon = () => {
 
 const Layout = () => {
 
-    // border-zinc-600 dark:border-zinc-400
     return (
         <div className={'min-w-[320px] min-h-[100vh] flex flex-col bg-zinc-50 dark:bg-zinc-900'}>
             <header
                 className={`
                     fixed top-0 w-full h-14 px-2 sm:px-6 z-50
                     text-zinc-800 dark:text-zinc-100
-                    bg-white dark:bg-zinc-900
-                    border-b border-solid
+                    bg-zinc-200 dark:bg-zinc-950
                 `}
             >
                 <nav className={'h-full flex items-center'}>
@@ -140,7 +150,7 @@ const Layout = () => {
             <main className={'pt-14 mb-6 grow text-zinc-800 dark:text-zinc-100 transition-colors duration-700'}>
                 <Outlet/>
             </main>
-            <footer className={'h-40 bg-zinc-500'}>
+            <footer className={'h-32 bg-zinc-200 dark:bg-zinc-950'}>
 
             </footer>
         </div>

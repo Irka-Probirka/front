@@ -11,6 +11,7 @@ import Profile from "./pages/profile";
 import {getUserData} from "./api/userAPI";
 import PrivateWrapper from "./contexts/privateWrapper";
 import Lesson from "./pages/lesson";
+import Courses from "./pages/courses";
 
 
 function App() {
@@ -39,7 +40,8 @@ function App() {
 
                         <Route element={<PrivateWrapper/>}>
                             <Route path="profile" element={<Profile/>}/>
-                            <Route path="lesson/:id" element={<Lesson/>}/>
+                            <Route path="courses" element={<Courses/>}/>
+                            <Route path="courses/:courseId/lesson/:id" element={<Lesson/>}/>
                         </Route>
 
                     </Route>

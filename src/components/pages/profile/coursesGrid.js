@@ -1,4 +1,4 @@
-
+import Block from "./block";
 
 
 const CourseGrid = ({courses, setSelectedCourse}) => {
@@ -10,17 +10,9 @@ const CourseGrid = ({courses, setSelectedCourse}) => {
     return (
         <div className={'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'}>
             {courses.map((item, index) =>
-                <div
+                <Block
                     id={item.id}
                     key={index}
-                    className={`
-                            hover:cursor-pointer select-none
-                            grid grid-cols-[120px,_1fr] md:flex items-center space-x-4 md:space-x-2 text-white rounded-2xl
-                            py-3.5 px-3 
-                            bg-gradient-to-br from-royal-blue-400 dark:from-royal-blue-600 
-                            to-royal-blue-600 dark:to-zinc-800 
-                            border border-solid border-royal-blue-600 dark:border-zinc-800
-                        `}
                     onClick={handleSelectCourse(item.id)}
                 >
                     <span
@@ -28,7 +20,7 @@ const CourseGrid = ({courses, setSelectedCourse}) => {
                         {item.subject.title}
                     </span>
                     <span>{item.title}</span>
-                </div>
+                </Block>
             )}
         </div>
     )
