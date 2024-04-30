@@ -125,8 +125,8 @@ const Courses = () => {
                             </div>
                         </div>
                         <div
-                            className={`${isLessonInfoVisible ? 'block' : 'hidden'} absolute top-[56px] right-0 left-0 h-full 400:relative 400:top-0 dark:bg-zinc-900`}>
-                            <div className={'flex items-start justify-between gap-2 min-h-[56px]'}>
+                            className={`${isLessonInfoVisible ? 'block' : 'hidden'} absolute top-[56px] -right-1 -left-1 -bottom-1 400:relative 400:top-0 bg-zinc-50 dark:bg-zinc-900`}>
+                            <div className={'flex items-start justify-between gap-2 min-h-[30px] 400:min-h-[56px]'}>
                                 <h3 className={'sm:text-lg md:text-xl sm:text-center'}>
                                     {selectedCourse?.title}
                                 </h3>
