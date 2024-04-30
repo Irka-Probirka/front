@@ -2,7 +2,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './input.css';
 import Home from "./pages/home";
 import About from "./pages/about";
-import {useState} from "react";
+import {Suspense, useState} from "react";
 import Layout from "./components/Layout";
 import Calendar from "./pages/calendar";
 import Login from "./pages/login";
@@ -12,6 +12,7 @@ import {getUserData} from "./api/userAPI";
 import PrivateWrapper from "./contexts/privateWrapper";
 import Lesson from "./pages/lesson";
 import Courses from "./pages/courses";
+import RequireLesson from "./contexts/requireLesson";
 
 
 function App() {
@@ -37,11 +38,15 @@ function App() {
                         <Route path="about" element={<About/>}/>
                         <Route path="calendar" element={<Calendar/>}/>
                         <Route path="login" element={<Login/>}/>
+                        <Route path="courses" element={<Courses/>}/>
 
                         <Route element={<PrivateWrapper/>}>
                             <Route path="profile" element={<Profile/>}/>
-                            <Route path="courses" element={<Courses/>}/>
-                            <Route path="courses/:courseId/lesson/:id" element={<Lesson/>}/>
+                            <Route path="courses/:courseId/lesson/:id" element={
+                                // <RequireLesson>
+                                    <Lesson/>
+                                // </RequireLesson>
+                            }/>
                         </Route>
 
                     </Route>

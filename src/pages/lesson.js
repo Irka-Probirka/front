@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getLessonById} from "../api/lessonAPI";
 import {useEffect, useState} from "react";
 
@@ -13,9 +13,11 @@ const Message = ({children}) => {
 
 
 const LinkBack = () => {
+    const navigate = useNavigate();
+
     return (
-        <Link
-            to={'/courses'}
+        <button
+            onClick={() => navigate(-1)}
             className={`
                 group flex items-center gap-1 
                 rounded-lg overflow-hidden py-0.5 px-3 w-max
@@ -31,7 +33,7 @@ const LinkBack = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>
             </svg>
             <span className={'pb-px'}>Назад</span>
-        </Link>
+        </button>
     )
 }
 

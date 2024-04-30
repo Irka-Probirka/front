@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 
 const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
@@ -62,7 +63,8 @@ const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
                                     const isLessonOver = (dateLesson < new Date());
 
                                     return (
-                                        <div
+                                        <Link
+                                            to={`/courses/${lesson.curse.id}/lesson/${lesson.id}`}
                                             key={index}
                                             className={'flex justify-between text-sm mt-1 text-royal-blue-900 dark:text-royal-blue-200'}
                                         >
@@ -73,7 +75,7 @@ const ToDoRightMenu = ({date, lessonInProfileGroupBy}) => {
                                             <div className={`${isLessonOver ? 'block' : 'hidden'} ml-1 block 800:hidden lg:block text-royal-blue-900 dark:text-royal-blue-200`}>
                                                 Закончился
                                             </div>
-                                        </div>
+                                        </Link>
                                     )
                                 })}
                             </li>

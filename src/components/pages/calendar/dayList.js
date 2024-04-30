@@ -1,4 +1,4 @@
-
+import {Link} from "react-router-dom";
 
 
 const DayList = ({daysInMonth, firstDayOfMonth, lessons, date}) => {
@@ -40,10 +40,14 @@ const DayList = ({daysInMonth, firstDayOfMonth, lessons, date}) => {
                                 const minutes = dateLesson.getMinutes() < 10 ? `${dateLesson.getMinutes()}0` : dateLesson.getMinutes();
 
                                 return (
-                                    <div key={index} className={'flex justify-between px-1'}>
+                                    <Link
+                                        to={`/courses/${item.curse.id}/lesson/${item.id}`}
+                                        key={index}
+                                        className={'flex justify-between px-1 hover:underline'}
+                                    >
                                         <div className={'truncate'}>{item.curse.subject.title}</div>
                                         <div>{hours}:{minutes}</div>
-                                    </div>
+                                    </Link>
                                 )
                             })}
                         </div>
