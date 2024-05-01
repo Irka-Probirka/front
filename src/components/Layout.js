@@ -86,7 +86,7 @@ const AuthMenu = () => {
                                 </svg>
                                 <span>Мои курсы</span>
                             </MenuLink>
-                            <MenuLink to={'tasks'}>
+                            <MenuLink to={'sections'}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      strokeWidth={1.5} stroke="currentColor" className="size-5">
                                     <path strokeLinecap="round" strokeLinejoin="round"
@@ -139,7 +139,7 @@ const Layout = () => {
                     <div className={'h-full hidden sm:flex items-center space-x-3'}>
                         <NavLink href={'/'}>Курсы</NavLink>
                         <NavLink href={'/calendar'}>Календарь</NavLink>
-                        <NavLink href={'/about'}>Задачи</NavLink>
+                        <NavLink href={'/sections'}>Задачи</NavLink>
                     </div>
                     <div className={'grow flex gap-[10px] items-center justify-end'}>
                         <ChangeThemeButton/>

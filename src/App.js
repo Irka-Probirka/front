@@ -13,6 +13,9 @@ import PrivateWrapper from "./contexts/privateWrapper";
 import Lesson from "./pages/lesson";
 import Courses from "./pages/courses";
 import RequireLesson from "./contexts/requireLesson";
+import Sections from "./pages/sections";
+import Tasks from "./pages/tasks";
+import TasksLayout from "./components/tasksLayout";
 
 
 function App() {
@@ -39,6 +42,10 @@ function App() {
                         <Route path="calendar" element={<Calendar/>}/>
                         <Route path="login" element={<Login/>}/>
                         <Route path="courses" element={<Courses/>}/>
+                        <Route path="sections" element={<TasksLayout />}>
+                            <Route index element={<Sections/>}/>
+                            <Route path=":sectionId" element={<Tasks/>}/>
+                        </Route>
 
                         <Route element={<PrivateWrapper/>}>
                             <Route path="profile" element={<Profile/>}/>
