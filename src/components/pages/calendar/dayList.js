@@ -5,7 +5,7 @@ const DayList = ({daysInMonth, firstDayOfMonth, lessons, date}) => {
     const currentDate = new Date();
 
     return (
-        <div className={'grid grid-cols-7 mt-2'} id={'calendarList'}>
+        <div className={'grid grid-cols-7 mt-2'}>
             {Array(daysInMonth).fill('').map((item, index) => {
                 const colStart = (firstDayOfMonth + index) % 7;
                 const filteredTodayLessons = lessons?.filter(lessons =>
@@ -30,7 +30,8 @@ const DayList = ({daysInMonth, firstDayOfMonth, lessons, date}) => {
                         <div className={'text-center text-sm sm:text-base pt-1 sm:pt-0'}>{index + 1}</div>
                         <div className={'flex sm:hidden justify-center pt-2 h-full gap-1'}>
                             {sortedTodayLessons.map((item, index) =>
-                                <div key={index} className={'size-[5px] bg-royal-blue-600 dark:bg-royal-blue-400 rounded-full'}/>
+                                <div key={index}
+                                     className={'size-[5px] bg-royal-blue-600 dark:bg-royal-blue-400 rounded-full'}/>
                             )}
                         </div>
                         <div className={'hidden sm:flex flex-col text-xs'}>
