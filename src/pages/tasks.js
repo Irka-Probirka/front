@@ -4,12 +4,11 @@ import {checkCorrectAnswer, getAllTasksFiltered} from "../api/tasksAPI";
 import {useAuth} from "../hooks/useAuth";
 
 
-const CheckAnswer = ({taskId, ...props}) => {
+const CheckAnswer = ({taskId}) => {
     const [inputValue, setInputValue] = useState('');
     const [countTry, setCountTry] = useState(0);
     const [answer, setAnswer] = useState('');
     const {user} = useAuth();
-
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -24,10 +23,6 @@ const CheckAnswer = ({taskId, ...props}) => {
         return () => clearTimeout(timer)
     }, [inputValue])
 
-    useEffect(() => {
-        console.log(answer);
-    }, [answer])
-
     const handleCheckInput = (e) => {
         if (e.target.localName === 'input') {
             setCountTry(0);
@@ -37,11 +32,12 @@ const CheckAnswer = ({taskId, ...props}) => {
 
     return (
         <div className={'flex items-center space-x-1.5'}>
+            <label htmlFor={`inputTask${taskId}`}>Ответ:</label>
             <input
+                id={`inputTask${taskId}`}
                 type="text"
                 value={inputValue}
-                className={'pl-1 leading-7 rounded border focus:border-royal-blue-600 active:border-royal-blue-600'}
-                {...props}
+                className={'pl-1 leading-7 rounded border border-royal-blue-600 bg-zinc-200'}
                 onChange={handleCheckInput}
             />
             {answer.id === taskId && countTry !== 0 && inputValue.length !== 0 &&
@@ -99,16 +95,13 @@ const Tasks = () => {
                                 </div>
                                 <ul className={'space-y-2 h-0 overflow-hidden'} id={section.id}>
                                     {section.theme.map((task, index) =>
-                                        <li
-                                            key={index}
-                                            className={'p-6 first:mt-4 bg-zinc-200 rounded-lg'}
-                                        >
+                                        <li key={index} className={'p-6 first:mt-4 bg-zinc-200 rounded-lg space-y-2'}>
                                             <div>Задача {index + 1}</div>
                                             <p className={'text-lg text-justify'}>{task.title}</p>
                                             {task?.img_task &&
                                                 <div className={'flex justify-center'}>
                                                     <img src={`${task?.img_task}`} alt={'картинка'}
-                                                         className={'max-w-[400px]'}/>
+                                                         className={'max-h-[220px]'}/>
                                                 </div>
                                             }
                                             <CheckAnswer taskId={task.id}/>
