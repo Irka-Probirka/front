@@ -3,8 +3,8 @@ import {useEffect, useState} from "react";
 import {getCourseInProfile} from "../api/coursesAPI";
 import Container from "../components/container";
 import {getSubjects} from "../api/subjectAPI";
-import Span from "../components/span";
 import {Link} from "react-router-dom";
+import ButtonClose from "../components/buttonClose";
 
 
 const Block = ({children, onClick, ...props}) => {
@@ -130,15 +130,7 @@ const Courses = () => {
                                 <h3 className={'sm:text-lg md:text-xl sm:text-center'}>
                                     {selectedCourse?.title}
                                 </h3>
-                                <button
-                                    onClick={() => setIsLessonInfoVisible(false)}
-                                    className={'bg-royal-blue-400 dark:bg-royal-blue-600 rounded-md text-white p-0.5 sm:p-1'}
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         strokeWidth={1.5} stroke="currentColor" className="size-5">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12"/>
-                                    </svg>
-                                </button>
+                                <ButtonClose type={'flat'} onClick={() => setIsLessonInfoVisible(false)}/>
                             </div>
                             <p>Уроки:</p>
                             <ul className={'mt-1 space-y-0.5 list-disc'}>
