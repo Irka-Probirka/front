@@ -1,52 +1,103 @@
 import Button from "../../button";
 import {addCourseInProfile} from "../../../api/coursesAPI";
 import {useAuth} from "../../../hooks/useAuth";
-import {useContext} from "react";
+import Modal from "../../modal";
+import {useState} from "react";
+import {Link} from "react-router-dom";
 
 
-const CourseCard = ({course, isBuyed, ...props}) => {
-    const {user, isAuth} = useAuth();
-
+const LinkAsButton = ({to, children}) => {
     return (
-        <div
-            className={`
-                p-3 rounded
-                has-[:disabled]:opacity-50 opacity-1
-                has-[:disabled]:animate-opacityHide50
-                dark:hover:outline-royal-blue-600
-                bg-gradient-to-br to-70%
-                from-royal-blue-200 to-royal-blue-300 text-black
-                dark:from-royal-blue-600 dark:to-royal-blue-950 dark:text-royal-blue-50
-            `}
-            {...props}
+        <Link
+            className={'block py-1 text-center rounded-lg text-royal-blue-400 border border-solid border-royal-blue-400 hover:text-royal-blue-600 hover:border-royal-blue-600'}
+            to={to}
         >
-            <p className={'text-royal-blue-900 dark:text-royal-blue-50 text-xs'}>{course.subject.title}</p>
-            <p className={'text-lg mt-1'}>
-                {course.title}
-            </p>
-            <p className={'text-sm'}>{course.about}</p>
-            <p className={'text-sm'}>{course.information}</p>
-            <p className={'text-right'}>Цена: {course.price} руб</p>
-            {!!isAuth &&
-                <Button
-                    type={'flat'}
-                    disable={isBuyed}
-                    onClick={() => {
-                        addCourseInProfile(user.profile, course.id)
-                            .then(res => console.log('Успешная покупка курса!'))
-                            .catch(reason => console.log(reason));
-                    }}
-                >
-                    Купить курс
-                </Button>
-            }
-        </div>
+            {children}
+        </Link>
     )
 }
 
 
-const Courses = ({ courses, coursesInProfile }) => {
+const CourseCard = ({course, isBuyed, ...props}) => {
+    const [modalVisible, setModalVisible] = useState(false);
     const {user, isAuth} = useAuth();
+
+    return (
+        <>
+            <div
+                className={`
+                flex flex-col hover:cursor-pointer
+                p-3 rounded-xl ${isAuth ? 'h-[160px]' : 'h-[130px]'} overflow-hidden
+                has-[:disabled]:opacity-50 opacity-1
+                has-[:disabled]:animate-opacityHide50
+                dark:hover:outline-royal-blue-600
+                bg-gradient-to-br to-70% shadow-inner
+                from-royal-blue-200 to-royal-blue-300 text-black
+                dark:from-royal-blue-600 dark:to-royal-blue-950 dark:text-royal-blue-50
+            `}
+                onClick={() => setModalVisible(true)}
+                {...props}
+            >
+                <span className={'text-royal-blue-900 dark:text-royal-blue-50 text-xs'}>{course.subject.title}</span>
+                <h3 className={'text-lg mt-1 truncate'}>{course.title}</h3>
+                <p className={'text-sm truncate'}>{course.about}</p>
+                {/*<p className={'text-sm'}>{course.information}</p>*/}
+                <span className={'grow flex items-end justify-end m-1'}>Цена: {course.price} руб</span>
+                {isAuth &&
+                    <Button
+                        type={'flat'}
+                        disable={isBuyed}
+                        onClick={() => {
+                            addCourseInProfile(user.profile, course.id)
+                                .then(res => console.log('Успешная покупка курса!'))
+                                .catch(reason => console.log(reason));
+                        }}
+                    >
+                        Купить курс
+                    </Button>
+                }
+            </div>
+
+            <Modal visible={modalVisible} setVisible={setModalVisible}>
+                <div className={'flex flex-col h-full'}>
+                    <h3 className={'text-xl text-center mb-4 mx-10'}>{course.title}</h3>
+                    <p className={''}>{course.about}</p>
+                    <p className={''}>{course.information}</p>
+                    {isAuth &&
+                        <div className={'grow content-end'}>
+                            {isBuyed
+                                ?
+                                <>
+                                    <p className={'text-center mb-2'}>Курс уже куплен</p>
+                                    <LinkAsButton to={'/courses'}>
+                                        Перейти
+                                    </LinkAsButton>
+                                </>
+                                :
+                                <Button
+                                    type={'flat'}
+                                    disable={isBuyed}
+                                    onClick={() => {
+                                        addCourseInProfile(user.profile, course.id)
+                                            .then(res => console.log('Успешная покупка курса!'))
+                                            .catch(reason => console.log(reason));
+                                    }}
+                                >
+                                    Купить курс
+                                </Button>
+                            }
+                        </div>
+                    }
+                </div>
+            </Modal>
+        </>
+    )
+}
+
+
+const Courses = ({courses, coursesInProfile}) => {
+    const {user, isAuth} = useAuth();
+
 
     if (courses?.length === 0) {
         return (
@@ -62,16 +113,12 @@ const Courses = ({ courses, coursesInProfile }) => {
     }
 
     return (
-        <div className={'grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3'}>
+        <div className={'grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}>
             {courses?.map((item, index) => {
-                if (coursesInProfile?.curses?.find(object => object.id === item.id)) {
-                    return (
-                        <CourseCard course={item} key={index} isBuyed={true}/>
-                    )
-                }
+                const isBuyed = !!coursesInProfile.curses?.find(object => object.id === item.id)
 
                 return (
-                    <CourseCard course={item} key={index}/>
+                    <CourseCard course={item} key={index} isBuyed={isBuyed}/>
                 )
             })}
         </div>

@@ -1,12 +1,14 @@
 import Courses from "../components/pages/home/courses";
-import React, {createContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getSubjects} from "../api/subjectAPI";
 import CustomRadioInput from "../components/pages/home/customRadioInput";
 import {useAuth} from "../hooks/useAuth";
 import {getCourseInProfile, getCourses} from "../api/coursesAPI";
+import Container from "../components/container";
+import Modal from "../components/modal";
 
 
-const Subjects = () => {
+const Subjects = ({setFilter}) => {
     const [subjects, setSubjects] = useState([]);
 
     useEffect(() => {
@@ -15,9 +17,7 @@ const Subjects = () => {
             .catch(reason => console.log(reason))
     }, []);
 
-    const handleChangeObject = () => {
-        console.log('change subject');
-    }
+    const handleChangeObject = (id) => setFilter(id);
 
     return (
         <fieldset
@@ -32,12 +32,13 @@ const Subjects = () => {
                 Выберите направление подготовки
             </legend>
             <div className={'flex flex-wrap justify-center gap-2 mt-4 mb-6 mx-6'}>
-                <CustomRadioInput id={'reset'}>
+                <CustomRadioInput id={'reset'} onInputChange={() => handleChangeObject('all')}>
                     Все предметы
                 </CustomRadioInput>
                 {subjects.map((item, index) => {
                     return (
-                        <CustomRadioInput id={item.title} key={index} onInputChange={handleChangeObject}>
+                        <CustomRadioInput id={item.title} key={index}
+                                          onInputChange={() => handleChangeObject(item.title)}>
                             {item.title}
                         </CustomRadioInput>
                     )
@@ -48,11 +49,10 @@ const Subjects = () => {
 };
 
 
-const HomeContext = createContext(null);
-
 const Home = () => {
-
     const [courses, setCourses] = useState([]);
+    const [filter, setFilter] = useState('all');
+    const [filteredCourses, setFilteredCourses] = useState([]);
     const [coursesInProfile, setCoursesInProfile] = useState([]);
     const {user} = useAuth();
 
@@ -61,7 +61,10 @@ const Home = () => {
 
         (async function () {
             await getCourses()
-                .then(setCourses)
+                .then(data => {
+                    setCourses(data);
+                    setFilteredCourses(data);
+                })
                 .catch(reason => console.log(reason));
 
             if (user) {
@@ -72,9 +75,17 @@ const Home = () => {
         })()
     }, [user])
 
+    useEffect(() => {
+        if (filter === 'all') {
+            setFilteredCourses(courses);
+        } else {
+            const filtered = courses.filter(course => course.subject.title === filter);
+            setFilteredCourses(filtered);
+        }
+    }, [filter])
 
     return (
-        <HomeContext.Provider value={{ courses, coursesInProfile }}>
+        <>
             <div className={'flex flex-col'}>
                 <div className={'max-w-2xl px-6 mx-auto mt-8 md:mt-16 mb-6 md:mb-12 text-center'}>
                     <div className={'text-3xl md:text-5xl tracking-tight font-bold'}>
@@ -88,16 +99,16 @@ const Home = () => {
                         и научиться решать задачи
                     </div>
                 </div>
-                <div className={'container max-w-7xl px-6 pb-12 mx-auto'}>
+                <Container>
                     <>
-                        <Subjects/>
+                        <Subjects setFilter={setFilter}/>
                     </>
                     <form className={'mt-10'}>
-                        <Courses courses={courses} coursesInProfile={coursesInProfile}/>
+                        <Courses courses={filteredCourses} coursesInProfile={coursesInProfile}/>
                     </form>
-                </div>
+                </Container>
             </div>
-        </HomeContext.Provider>
+        </>
     );
 };
 
