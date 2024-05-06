@@ -28,7 +28,9 @@ export const getAllTask = async () => {
     return Promise.reject('Ошибка при получении всех заданий');
 }
 
-
+/*
+    Функция для проверки правильности ввода ответа на задачу
+ */
 export const checkCorrectAnswer = async (answer, task_id, profile_id = -1) => {
     const response = await fetch(HOST_URL + '/analys', {
         method: "POST",
@@ -48,4 +50,25 @@ export const checkCorrectAnswer = async (answer, task_id, profile_id = -1) => {
     }
 
     return Promise.reject('Ошибка при получении ответа на задание');
+}
+
+
+export const setNewHomeWork = async (lesson, homework_tasks) => {
+    const response = await fetch(API_URL + 'someLessonsInCourses/' + lesson.id, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            "title": lesson.title,
+            "date_time": lesson.date_time,
+            "home_task": homework_tasks,
+        })
+    });
+
+    if (response.ok) {
+        return await response.json()
+    }
+
+    return Promise.reject('Ошибка при создании домашнего задания');
 }
