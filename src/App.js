@@ -1,8 +1,7 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './input.css';
 import Home from "./pages/home";
-import About from "./pages/about";
-import {Suspense, useState} from "react";
+import {useState} from "react";
 import Layout from "./components/Layout";
 import Calendar from "./pages/calendar";
 import Login from "./pages/login";
@@ -16,6 +15,8 @@ import RequireLesson from "./contexts/requireLesson";
 import Sections from "./pages/sections";
 import Tasks from "./pages/tasks";
 import TasksLayout from "./components/tasksLayout";
+import CreateHomeTask from "./pages/createHometask";
+import Homework from "./pages/homework";
 
 
 function App() {
@@ -38,7 +39,6 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Layout/>}>
                         <Route index element={<Home/>}/>
-                        <Route path="about" element={<About/>}/>
                         <Route path="calendar" element={<Calendar/>}/>
                         <Route path="login" element={<Login/>}/>
                         <Route path="courses" element={<Courses/>}/>
@@ -49,11 +49,13 @@ function App() {
 
                         <Route element={<PrivateWrapper/>}>
                             <Route path="profile" element={<Profile/>}/>
+                            <Route path="homework" element={<Homework/>}/>
                             <Route path="courses/:courseId/lesson/:id" element={
                                 // <RequireLesson>
                                     <Lesson/>
                                 // </RequireLesson>
                             }/>
+                            <Route path="create-home-task/:lessonId" element={<CreateHomeTask/>}/>
                         </Route>
 
                     </Route>

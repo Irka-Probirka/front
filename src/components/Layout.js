@@ -50,7 +50,7 @@ const AuthMenu = () => {
 
     if (isAuth) {
         return (
-            <div className={'relative'} onClick={() => setVisible(prev => !prev)}>
+            <div className={'relative w-max'} onClick={() => setVisible(prev => !prev)}>
                 <span className={'hidden 400:block select-none hover:cursor-pointer'} id={"headerMenu"}>
                     {user?.first_name} {user?.last_name}
                 </span>
@@ -70,7 +70,7 @@ const AuthMenu = () => {
                         className={'flex flex-col text-right overflow-hidden rounded-md bg-zinc-100 dark:bg-royal-blue-950 shadow-lg dark:shadow-royal-blue-900'}
                     >
                         <ul className={'border-b border-solid space-y-0.5'}>
-                            <MenuLink to={'profile'}>
+                            <MenuLink to={'/profile'}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      strokeWidth={1.5} stroke="currentColor" className="size-5">
                                     <path strokeLinecap="round" strokeLinejoin="round"
@@ -78,7 +78,7 @@ const AuthMenu = () => {
                                 </svg>
                                 <span>Профиль</span>
                             </MenuLink>
-                            <MenuLink to={'courses'}>
+                            <MenuLink to={'/courses'}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      strokeWidth={1.5} stroke="currentColor" className="size-5">
                                     <path strokeLinecap="round" strokeLinejoin="round"
@@ -86,7 +86,15 @@ const AuthMenu = () => {
                                 </svg>
                                 <span>Мои курсы</span>
                             </MenuLink>
-                            <MenuLink to={'sections'}>
+                            <MenuLink to={'/homework'}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     strokeWidth={1.5} stroke="currentColor" className="size-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+                                </svg>
+                                <span>Домашнее задание</span>
+                            </MenuLink>
+                            <MenuLink to={'/sections'}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      strokeWidth={1.5} stroke="currentColor" className="size-5">
                                     <path strokeLinecap="round" strokeLinejoin="round"
