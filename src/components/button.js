@@ -1,8 +1,8 @@
 
 
-const Button = ({type, disable, children, ...props}) => {
-
+const Button = ({type, w, disable, children, ...props}) => {
     let className = '';
+    let width = 'w-full';
 
     switch (type){
         case 'outline':
@@ -16,7 +16,7 @@ const Button = ({type, disable, children, ...props}) => {
 
     return (
         <button
-            className={`w-full py-1 text-center rounded-lg button-shadow ${className} transition-colors duration-300`}
+            className={`${w ? w + ' px-3' : width} py-1 text-center rounded-lg button-shadow ${className} transition-colors duration-300`}
             disabled={!!disable}
             {...props}
         >
