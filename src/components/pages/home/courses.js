@@ -35,24 +35,15 @@ const CourseCard = ({course, isBuyed, ...props}) => {
                 from-royal-blue-200 to-royal-blue-300 text-black
                 dark:from-royal-blue-600 dark:to-royal-blue-950 dark:text-royal-blue-50
             `}
-                onClick={() => setModalVisible(true)}
+                onClick={() => setModalVisible(prev => true)}
                 {...props}
             >
                 <span className={'text-royal-blue-900 dark:text-royal-blue-50 text-xs'}>{course.subject.title}</span>
                 <h3 className={'text-lg mt-1 truncate'}>{course.title}</h3>
                 <p className={'text-sm truncate'}>{course.about}</p>
-                {/*<p className={'text-sm'}>{course.information}</p>*/}
                 <span className={'grow flex items-end justify-end m-1'}>Цена: {course.price} руб</span>
                 {isAuth &&
-                    <Button
-                        type={'flat'}
-                        disable={isBuyed}
-                        onClick={() => {
-                            addCourseInProfile(user.profile, course.id)
-                                .then(res => console.log('Успешная покупка курса!'))
-                                .catch(reason => console.log(reason));
-                        }}
-                    >
+                    <Button type={'flat'} disable={isBuyed} onClick={(e) => e.preventDefault()}>
                         Купить курс
                     </Button>
                 }
