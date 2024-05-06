@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import video from '../../../video/video.mp4';
 
 
+
 const BtnPlay = ({isPaused, ...props}) => {
 
     if (isPaused) {
@@ -117,7 +118,12 @@ const VideoPlayer = () => {
             id={'videoContainer'}
             data-volume-level={'high'}
         >
-            <video src={video} id={'video'} onClick={togglePlay}/>
+            {/* VIDEO */}
+            {video
+                ? <video src={video} id={'video'} onClick={togglePlay}/>
+                : <p>Видео загружается</p>
+            }
+
             <div className={`
                     flex items-center gap-2 p-2 text-white group/player-[.paused]:opacity-100 z-0
                     absolute bottom-0 left-0 right-0 
