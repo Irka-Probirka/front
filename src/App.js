@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, redirect, Route, Routes} from "react-router-dom";
 import './input.css';
 import Home from "./pages/home";
 import {useState} from "react";
@@ -17,6 +17,7 @@ import Tasks from "./pages/tasks";
 import TasksLayout from "./components/tasksLayout";
 import CreateHomeTask from "./pages/createHometask";
 import Homework from "./pages/homework";
+import HomeworkInLesson from "./pages/homeworkInLesson";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             .catch(reason => {
                 localStorage.setItem('auth', 'false');
                 localStorage.removeItem('token');
+                redirect('/');
                 console.log('App.js: ', reason);
             });
     }
@@ -50,6 +52,7 @@ function App() {
                         <Route element={<PrivateWrapper/>}>
                             <Route path="profile" element={<Profile/>}/>
                             <Route path="homework" element={<Homework/>}/>
+                            <Route path="homework/lesson/:id" element={<HomeworkInLesson/>}/>
                             <Route path="courses/:courseId/lesson/:id" element={
                                 // <RequireLesson>
                                     <Lesson/>

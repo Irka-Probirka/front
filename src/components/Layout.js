@@ -48,7 +48,7 @@ const AuthMenu = () => {
         return () => document.removeEventListener('click', handlerOpenMenu)
     }, [])
 
-    if (isAuth) {
+    if (isAuth && user) {
         return (
             <div className={'relative w-max'} onClick={() => setVisible(prev => !prev)}>
                 <span className={'hidden 400:block select-none hover:cursor-pointer'} id={"headerMenu"}>
