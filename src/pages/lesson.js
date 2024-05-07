@@ -66,7 +66,10 @@ const Lesson = () => {
             </Container>
             <Container>
                 {isLessonOver && lesson.stream_status === 'offline'
-                    ? <Message>Урок закончился</Message>
+                    ? <>
+                        <Message>Урок закончился</Message>
+                        <Link to={`/homework/lesson/${params.id}`} className={'text-lg'}>Посмотреть домашнее задание</Link>
+                    </>
                     : <>
                         <Message>Урок еще не начался, можете подождать начала здесь</Message>
                         <div className={'grid grid-cols-[1fr,_340px] min-h-[420px] h-max mt-5'}>
