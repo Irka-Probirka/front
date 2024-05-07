@@ -1,51 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {checkCorrectAnswer, getAllTasksFiltered} from "../api/tasksAPI";
-import {useAuth} from "../hooks/useAuth";
-
-
-const CheckAnswer = ({taskId}) => {
-    const [inputValue, setInputValue] = useState('');
-    const [countTry, setCountTry] = useState(0);
-    const [answer, setAnswer] = useState('');
-    const {user} = useAuth();
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            checkCorrectAnswer(inputValue, taskId, user?.profile)
-                .then(data => {
-                    setAnswer(data);
-                    setCountTry(prev => prev + 1);
-                })
-                .catch(console.log);
-        }, 700)
-
-        return () => clearTimeout(timer)
-    }, [inputValue])
-
-    const handleCheckInput = (e) => {
-        if (e.target.localName === 'input') {
-            setCountTry(0);
-            setInputValue(e.target.value)
-        }
-    }
-
-    return (
-        <div className={'flex items-center space-x-1.5'}>
-            <label htmlFor={`inputTask${taskId}`}>Ответ:</label>
-            <input
-                id={`inputTask${taskId}`}
-                type="text"
-                value={inputValue}
-                className={'pl-1 leading-7 rounded border border-royal-blue-600 bg-zinc-200'}
-                onChange={handleCheckInput}
-            />
-            {answer.id === taskId && countTry !== 0 && inputValue.length !== 0 &&
-                <span>{answer.res}</span>
-            }
-        </div>
-    )
-}
+import {getAllTasksFiltered} from "../api/tasksAPI";
+import CheckAnswerInput from "../components/checkAnswerInput";
 
 
 const Tasks = () => {
@@ -104,7 +60,7 @@ const Tasks = () => {
                                                          className={'max-h-[220px]'}/>
                                                 </div>
                                             }
-                                            <CheckAnswer taskId={task.id}/>
+                                            <CheckAnswerInput taskId={task.id}/>
                                         </li>
                                     )}
                                 </ul>
