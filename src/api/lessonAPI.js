@@ -11,6 +11,9 @@ export const getAllLessons = async () => {
     return Promise.reject('Ошибка при получении уроков')
 }
 
+/*
+    Получение инфы об уроках лежаших в курсе по ID
+ */
 export const getLessonsInCourse = async (course_id) => {
     const response = await fetch(API_URL + 'lessonsInCourses/' + course_id);
 
@@ -21,6 +24,9 @@ export const getLessonsInCourse = async (course_id) => {
     return Promise.reject('Ошибка при получении уроков из курса')
 }
 
+/*
+    Получение информации об уроке
+ */
 export const getLessonById = async (lesson_id) => {
     const response = await fetch(API_URL + 'someLessonsInCourses/' + lesson_id);
 
