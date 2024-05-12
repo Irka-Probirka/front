@@ -6,6 +6,7 @@ import VideoPlayer from "../components/pages/lesson/videoPlayer";
 import Container from "../components/container";
 import {useAuth} from "../hooks/useAuth";
 import {getUserData} from "../api/userAPI";
+import Chat from "../components/pages/lesson/chat";
 
 
 const Message = ({children}) => {
@@ -74,9 +75,7 @@ const Lesson = () => {
                         <Message>Урок еще не начался, можете подождать начала здесь</Message>
                         <div className={'grid grid-cols-[1fr,_340px] min-h-[420px] h-max mt-5'}>
                             <VideoPlayer/>
-                            <div className={'bg-royal-blue-200 dark:bg-royal-blue-950'}>
-                                {/*  Чат  */}
-                            </div>
+                            <Chat/>
                         </div>
                     </>
                 }
