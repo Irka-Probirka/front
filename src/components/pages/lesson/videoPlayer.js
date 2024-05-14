@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import video from '../../../video/video.mp4';
-
+import Hls from 'hls.js';
 
 
 const BtnPlay = ({isPaused, ...props}) => {
@@ -101,16 +101,34 @@ const VideoPlayer = () => {
         let volumeLevel;
         if (video.volume === 0 || video.muted) {
             volumeLevel = 'muted';
-        }
-        else if (video.volume > .5) {
+        } else if (video.volume > .5) {
             volumeLevel = 'high';
-        }
-        else {
+        } else {
             volumeLevel = 'low';
         }
 
         videoContainer.dataset.volumeLevel = volumeLevel;
     }
+
+    useEffect(() => {
+        var video = document.getElementById('video');
+        var videoSrc = 'http://localhost:8080/live/livestream.m3u8';
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            console.log(hls.loadSource(videoSrc));
+        }
+        else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+        }
+
+        video.addEventListener('loadedmetadata', function() {
+            video.currentTime = video.duration - 15;
+        });
+
+    }, [])
+
 
     return (
         <div
@@ -120,7 +138,13 @@ const VideoPlayer = () => {
         >
             {/* VIDEO */}
             {video
-                ? <video src={video} id={'video'} onClick={togglePlay}/>
+                ? <>
+                    <video src="http://localhost:8080/live/livestream.m3u8" id={'video'} onClick={togglePlay}
+                           fluid="true" autoPlay={true} muted={true}
+                           data-setup='{}'>
+                        <source src="http://localhost:8080/live/livestream.m3u8" type="application/x-mpegURL" />
+                    </video>
+                </>
                 : <p>Видео загружается</p>
             }
 
