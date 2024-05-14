@@ -30,7 +30,7 @@ const Chat = () => {
             //     setMessages(prevState => [...prevState, JSON.parse(event.data)]);
             // }
 
-            if (messages.length === 0 && Array.isArray(JSON.parse(event.data))) {
+            if (Array.isArray(JSON.parse(event.data))) { // messages.length === 0 &&
                 const arr = [];
                 JSON.parse(event.data).map(mess => arr.push(JSON.parse(mess)))
                 setMessages(arr);
@@ -38,7 +38,7 @@ const Chat = () => {
             else {
                 // console.log(event.data);
                 // console.log(JSON.parse(event.data));
-                setMessages(prevState => [...prevState, JSON.parse(event.data)]);
+                setMessages(prevState => [...prevState, JSON.parse(JSON.parse(event.data))]);
             }
         };
 
